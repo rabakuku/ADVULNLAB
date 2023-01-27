@@ -1,0 +1,595 @@
+{
+"lab" : {
+    "hosts" : {
+        "dc01" : {
+            "hostname" : "NYC",
+            "type" : "dc",
+            "local_admin_password": "8dCT-DJjgScp",
+            "domain" : "newyork.local",
+            "path" : "DC=newyork,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "newyork\\marco.Lopez",
+                    "newyork\\mateo.Pacheco",
+                    "newyork\\TimesSquare"
+                ],
+                "Remote Desktop Users" : [
+                    "newyork\\RadioCity",
+                    "newyork\\Rockefeller"
+                ]
+            },
+            "scripts" : ["sidhistory.ps1"],
+            "vulns" : []
+        },
+        "srv01" : {
+            "hostname" : "casterlyrock",
+            "type" : "server",
+            "local_admin_password": "EP+xh7Rk6j90",
+            "domain" : "newyork.local",
+            "path" : "DC=newyork,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "newyork\\Donald.Trump",
+                    "newyork\\jamie.CooperUnion"
+                ]
+            },
+            "Remote Desktop Users" : [
+                "newyork\\Lanister"
+            ],
+            "scripts" : [],
+            "vulns" : []
+        },
+        "dc02" : {
+            "hostname" : "Bronx",
+            "type" : "dc",
+            "local_admin_password": "NgtI75cKV+Pu",
+            "domain" : "north.newyork.local",
+            "path" : "DC=north,DC=newyork,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "north\\fernando.alonzo",
+                    "north\\valentino.alcantara",
+                    "north\\matias.Almonte"
+                ],
+                "Remote Desktop Users" : [
+                    "north\\North"
+                ]
+            },
+            "scripts" : [
+                "asrep_roasting.ps1",
+                "constrained_delegation_use_any.ps1",
+                "constrained_delegation_kerb_only.ps1",
+                "ntlm_relay.ps1",
+                "responder.ps1",
+                "gpo_abuse.ps1"
+            ],
+            "vulns" : []
+        },
+        "srv02" : {
+            "hostname" : "Yonkers",
+            "type" : "server",
+            "local_admin_password": "NgtI75cKV+Pu",
+            "domain" : "north.newyork.local",
+            "path" : "DC=north,DC=newyork,DC=local",
+            "use_laps": false,
+            "local_groups" : {
+                "Administrators" : [
+                    "north\\joel.exposito"
+                ],
+                "Remote Desktop Users" : [
+                    "north\\Patrol",
+                    "north\\NorthManager",
+                    "north\\North"
+                ]
+            },
+            "scripts" : [],
+            "vulns" : ["openshares"],
+            "mssql":{
+                "sa_password": "Sup1_sa_P@ssw0rd!",
+                "svcaccount" : "sql_svc",
+                "sysadmins" : [
+                    "NORTH\\elena.lopez"
+                ],
+                "executeaslogin" : {
+                    "NORTH\\miguel.cabrera" : "sa",
+                    "NORTH\\ claudio.ortiz" :  "NORTH\\elena.lopez"
+                },
+                "executeasuser" : {
+                    "arya_master_dbo": {
+                        "user": "NORTH\\pablo.sandoval",
+                        "db"  : "master",
+                        "impersonate" : "dbo"
+                    },
+                    "arya_dbms_dbo": {
+                        "user": "NORTH\\pablo.sandoval",
+                        "db"  : "msdb",
+                        "impersonate" : "dbo"
+                    }
+                },
+                "linked_servers": {
+                    "Salisbury" : {
+                        "data_src": "Salisbury.maryland.local",
+                        "users_mapping": [
+                            {"local_login": "NORTH\\elena.lopez","remote_login": "sa", "remote_password": "sa_P@ssw0rd!Ess0s"}
+                        ]
+                    }
+                }
+            }
+        },
+        "dc03" : {
+            "hostname" : "Baltimore",
+            "type" : "dc",
+            "local_admin_password": "Ufe-bVXSx9rk",
+            "domain" : "maryland.local",
+            "path" : "DC=maryland,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "maryland\\carmelo.Anthony"
+                ],
+                "Remote Desktop Users" : [
+                    "maryland\\Cecil"
+                ]
+            },
+            "scripts" : [],
+            "vulns" : ["ntlmdowngrade"]
+        },
+        "srv03" : {
+            "hostname" : "Salisbury",
+            "type" : "server",
+            "local_admin_password": "978i2pF43UJ-",
+            "domain" : "maryland.local",
+            "path" : "DC=maryland,DC=local",
+            "use_laps": true,
+            "local_groups" : {
+                "Administrators" : [
+                    "maryland\\joaquin.Pereida"
+                ]
+            },
+            "Remote Desktop Users" : [
+                "maryland\\Hartford"
+            ],
+            "scripts" : [],
+            "vulns" : ["openshares"],
+            "mssql":{
+                "sa_password": "sa_P@ssw0rd!Ess0s",
+                "svcaccount" : "sql_svc",
+                "sysadmins" : [
+                    "maryland\\joaquin.Pereida"
+                ],
+                "executeaslogin" : {
+                    "maryland\\teresa.Perez" : "sa"
+                },
+                "executeasuser" : {},
+                "linked_servers": {
+                    "Yonkers" : {
+                        "data_src": "Yonkers.north.newyork.local",
+                        "users_mapping": [
+                            {"local_login": "maryland\\joaquin.Pereida","remote_login": "sa", "remote_password": "Sup1_sa_P@ssw0rd!"}
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "domains" : {
+        "maryland.local" : {
+            "dc": "dc03",
+            "domain_password" : "Ufe-bVXSx9rk",
+            "netbios_name": "maryland",
+            "ca_server": "Salisbury",
+            "trust" : "newyork.local",
+            "laps_path": "OU=Laps,DC=maryland,DC=local",
+            "organisation_units" : {
+            },
+            "laps_readers": [
+                "teresa.Perez",
+                "KGB"
+            ],
+            "groups" : {
+                "universal" : {},
+                "global" : {
+                    "Cecil" : {
+                        "managed_by" : "marisol.Pedrosa",
+                        "path" : "CN=Users,DC=maryland,DC=local"
+                    },
+                    "Hartford" : {
+                        "managed_by" : "joaquin.Pereida",
+                        "path" : "CN=Users,DC=maryland,DC=local"
+                    }
+                },
+                "domainlocal" : {
+                    "LocalAdmin" : {
+                        "managed_by" : "carmelo.Anthony",
+                        "path" : "CN=Users,DC=maryland,DC=local"
+                    },
+                    "KGB" : {
+                        "path" : "CN=Users,DC=maryland,DC=local"
+                    }
+                }
+            },
+            "multi_domain_groups_member" : {
+                "LocalAdmin" : [
+                    "newyork.local\\nicolas.Maduro",
+                    "maryland.local\\carmelo.Anthony"
+                ],
+                "KGB" : [
+                    "newyork.local\\RadioCity"
+                ]
+            },
+            "acls" : {
+                "GenericAll_khal_viserys" : {"for": "joaquin.Pereida", "to": "marisol.Pedrosa", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_spy_jorah" : {"for": "KGB", "to": "teresa.Perez", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_khal_esc4" : {"for": "joaquin.Pereida", "to": "CN=ESC4,CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration,DC=maryland,DC=local", "right": "GenericAll", "inheritance": "None"},
+                "WriteProperty_petyer_domadmin" : {"for": "marisol.Pedrosa", "to": "teresa.Perez", "right": "WriteProperty", "inheritance": "All"},
+                "GenericWrite_LocalAdmin_Salisbury" : {"for": "LocalAdmin", "to": "Salisbury$", "right": "GenericWrite", "inheritance": "None"}
+            },
+            "users" : {
+                "carmelo.Anthony" : {
+                    "firstname"   : "carmelo",
+                    "surname"     : "anthony",
+                    "password"    : "BurnThemAll!", 
+                    "city"        : "-",
+                    "description" : "carmelo anthony",
+                    "groups"      : ["Cecil", "Domain Admins"],
+                    "path"        : "CN=Users,DC=maryland,DC=local"
+                },
+                "marisol.Pedrosa" : {
+                    "firstname"   : "marisol",
+                    "surname"     : "pedrosa",
+                    "password"    : "Iloveyou2022",
+                    "city"        : "-",
+                    "description" : "marisol pedrosa",
+                    "groups"      : ["Cecil"],
+                    "path"        : "CN=Users,DC=maryland,DC=local"
+                },
+                "joaquin.Pereida" : {
+                    "firstname"   : "joaquin",
+                    "surname"     : "pereida",
+                    "password"    : "horse",
+                    "city"        : "-",
+                    "description" : "joaquin pereida",
+                    "groups"      : ["Hartford"],
+                    "path"        : "CN=Users,DC=maryland,DC=local"
+                },
+                "teresa.Perez" : {
+                    "firstname"   : "teresa",
+                    "surname"     : "perez",
+                    "password"    : "H0nnor!",
+                    "city"        : "-",
+                    "description" : "teresa perez",
+                    "groups"      : ["Cecil"],
+                    "path"        : "CN=Users,DC=maryland,DC=local"
+                },
+                "sql_svc" : {
+                    "firstname"   : "sql",
+                    "surname"     : "service",
+                    "password"    : "YouWillNotKerboroast1ngMeeeeee",
+                    "city"        : "-",
+                    "description" : "sql service",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=maryland,DC=local",
+                    "spns"        : ["MSSQLSvc/Salisbury.maryland.local:1433","MSSQLSvc/Salisbury.maryland.local"]
+                }
+            }
+        },
+        "north.newyork.local" : {
+            "dc": "dc02",
+            "domain_password" : "NgtI75cKV+Pu",
+            "netbios_name": "NORTH",
+            "trust" : "",
+            "laps_path": "OU=Laps,DC=north,DC=newyork,DC=local",
+            "organisation_units" : {
+            },
+            "groups" : {
+                "universal" : {},
+                "global" : {
+                    "North" : {
+                        "managed_by" : "fernando.alonzo",
+                        "path" : "CN=Users,DC=North,DC=newyork,DC=local"
+                    },
+                    "Patrol" : {
+                        "managed_by" : "joel.exposito",
+                        "path" : "CN=Users,DC=North,DC=newyork,DC=local"
+                    },
+                    "NorthManager" : {
+                        "managed_by" : "joel.exposito",
+                        "path" : "CN=Users,DC=North,DC=newyork,DC=local"
+                    }
+                },
+                "domainlocal" : {
+                    "NorthMultiDom" : {
+                        "path" : "CN=Users,DC=North,DC=newyork,DC=local"
+                    }
+                }
+            },
+            "multi_domain_groups_member" : {
+                "NorthMultiDom" : [
+                    "maryland.local\\carmelo.Anthony"
+                ]
+            },
+            "acls" : {
+                "anonymous_rpc" : {"for": "NT AUTHORITY\\ANONYMOUS LOGON", "to": "DC=North,DC=newyork,DC=local", "right": "ReadProperty", "inheritance": "All"},
+                "anonymous_rpc2" : {"for": "NT AUTHORITY\\ANONYMOUS LOGON", "to": "DC=North,DC=newyork,DC=local", "right": "GenericExecute", "inheritance": "All"}
+            },
+            "users" : {
+                "pablo.Sandoval" : {
+                    "firstname"   : "pablo",
+                    "surname"     : "sandoval",
+                    "password"    : "Needle",
+                    "city"        : "Bronx",
+                    "description" : "pablo sandoval",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "fernando.Alonzo" : {
+                    "firstname"   : "fernando",
+                    "surname"     : "alonzo",
+                    "password"    : "IDr1R3allyF@sTF1!",
+                    "city"        : "New York City",
+                    "description" : "fernando alonzo",
+                    "groups"      : ["North", "Domain Admins"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "valentino.alcantara" : {
+                    "firstname"   : "valentino",
+                    "surname"     : "Alcantara",
+                    "password"    : "robbsansabradonaryarickon",
+                    "city"        : "New York City",
+                    "description" : "valentino alcantara",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "matias.Almonte" : {
+                    "firstname"   : "matias",
+                    "surname"     : "almonte",
+                    "password"    : "senoralmonte",
+                    "city"        : "Bronx",
+                    "description" : "matias almonte",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "alejandro.Rodriguez" : {
+                    "firstname"   : "alejandro",
+                    "surname"     : "rodriguez",
+                    "password"    : "=_)(*&^%$#@!qazaq",
+                    "city"        : "Bronx",
+                    "description" : "alejandro rodriguez",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                " claudio.Ortiz" : {
+                    "firstname"   : "claudio",
+                    "surname"     : "ortiz",
+                    "password"    : "iseeeveryone",
+                    "city"        : "Bronx",
+                    "description" : "claudio ortiz",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "salvador.Aguilar" : {
+                    "firstname"   : "salvador",
+                    "surname"     : "aguilar",
+                    "password"    : "Winter2022",
+                    "city"        : "Bronx",
+                    "description" : "salvador aguilar",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "pacofish" : {
+                    "firstname"   : "pacofish",
+                    "surname"     : "pacofish",
+                    "password"    : "pacofish",
+                    "city"        : "Bronx",
+                    "description" : "Good food",
+                    "groups"      : ["North"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "elena.Lopez" : {
+                    "firstname"   : "elena",
+                    "surname"     : "lopez",
+                    "password"    : "iknownothing",
+                    "city"        : "The Bronx",
+                    "description" : "elena lopez",
+                    "groups"      : ["North", "Patrol"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local",
+                    "spns"        : ["HTTP/thewall.north.newyork.local"]
+                },
+                "miguel.Cabrera" : {
+                    "firstname"   : "miguel",
+                    "surname"     : "cabrera",
+                    "password"    : "IloveBaseball",
+                    "city"        : "The Bronx",
+                    "description" : "miguel cabrera (Password : IloveBaseball)",
+                    "groups"      : ["Patrol"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "joel.exposito" : {
+                    "firstname"   : "joel",
+                    "surname"     : "exposito",
+                    "password"    : "_L0ngH@rn_",
+                    "city"        : "The Bronx",
+                    "description" : "joel exposito",
+                    "groups"      : ["Patrol", "NorthManager"],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
+                },
+                "sql_svc" : {
+                    "firstname"   : "sql",
+                    "surname"     : "service",
+                    "password"    : "YouWillNotKerboroast1ngMeeeeee",
+                    "city"        : "-",
+                    "description" : "sql service maybe",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=North,DC=newyork,DC=local",
+                    "spns"        : ["MSSQLSvc/Yonkers.north.newyork.local:1433","MSSQLSvc/Yonkers.north.newyork.local"]
+                }
+            }
+        },
+        "newyork.local" : {
+            "dc": "dc01",
+            "domain_password" : "8dCT-DJjgScp",
+            "netbios_name": "newyork",
+            "trust" : "maryland.local",
+            "laps_path": "OU=Laps,DC=newyork,DC=local",
+            "organisation_units" : {
+                "Upper"        : { "path" : "DC=newyork,DC=local"},
+                "Midtown" : { "path" : "DC=newyork,DC=local"},
+                "Lower"  : { "path" : "DC=newyork,DC=local"},
+                "WestSide"  : { "path" : "DC=newyork,DC=local"},
+                "Harlem"  : { "path" : "DC=newyork,DC=local"},
+                "SugarHill" : { "path" : "DC=newyork,DC=local"},
+                "Inwood"       : { "path" : "DC=newyork,DC=local"},
+                "WashingtonHeights"       : { "path" : "DC=newyork,DC=local"}
+            },
+            "groups" : {
+                "universal" : {},
+                "global" : {
+                    "CooperUnion" : {
+                        "managed_by" : "Donald.Trump",
+                        "path" : "OU=SugarHill,DC=newyork,DC=local"
+                    },
+                    "Rockefeller" : {
+                        "managed_by" : "marco.Lopez",
+                        "path" : "OU=Harlem,DC=newyork,DC=local"
+                    },
+                    "RadioCity" : {
+                        "path" : "OU=WestSide,DC=newyork,DC=local"
+                    },
+                    "EmpireState" : {
+                        "path" : "OU=WestSide,DC=newyork,DC=local"
+                    },
+                    "CentralPark" : {
+                        "path" : "OU=WestSide,DC=newyork,DC=local"
+                    },
+                    "TimesSquare" : {
+                        "path" : "OU=WestSide,DC=newyork,DC=local"
+                    }
+                },
+                "domainlocal" : {
+                    "MainMultiDoms" : {
+                        "path" : "CN=Users,DC=newyork,DC=local"
+                    }
+                }
+            },
+            "multi_domain_groups_member" : {
+                "MainMultiDoms" : [
+                    "maryland.local\\carmelo.Anthony"
+                ]
+            },
+            "acls" : {
+                "forcechangepassword_tywin_jaime" : {"for": "Donald.Trump", "to": "hugo.Chavez", "right": "Ext-User-Force-Change-Password", "inheritance": "None"},
+                "GenericWrite_on_user_jaimie_joffrey" : {"for": "hugo.Chavez", "to": "ramon.Maldonado", "right": "GenericWrite", "inheritance": "None"},
+                "Writedacl_joffrey_tyron" : {"for": "ramon.Maldonado", "to": "nicolas.Maduro", "right": "WriteDacl", "inheritance": "None"},
+                "self-self-membership-on-group_tyron_small_council" : {"for": "nicolas.Maduro", "to": "RadioCity", "right": "Ext-Self-Self-Membership", "inheritance": "None"},
+                "addmember_smallcouncil_EmpireState" : {"for": "RadioCity", "to": "EmpireState", "right": "Ext-Write-Self-Membership", "inheritance": "All"},
+                "write_owner_EmpireState_CentralPark" : {"for": "EmpireState", "to": "CentralPark", "right": "WriteOwner", "inheritance": "None"},
+                "GenericAll_CentralPark_stanis" : {"for": "CentralPark", "to": "diego.Montenegro", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_stanis_dc" : {"for": "diego.Montenegro", "to": "NYC$", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_group_acrrosdom_dc" : {"for": "MainMultiDoms", "to": "NYC$", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_varys_domadmin" : {"for": "jesus.puello", "to": "Domain Admins", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_varys_domadmin_holder" : {"for": "jesus.puello", "to": "CN=AdminSDHolder,CN=System,DC=newyork,DC=local", "right": "GenericAll", "inheritance": "None"}
+            },
+            "users" : {
+                "Donald.Trump" : {
+                    "firstname"   : "donald",
+                    "surname"     : "trump",
+                    "password"    : "MaKeam3ricaGr3at",
+                    "city"        : "Casterly Rock",
+                    "description" : "Donal Trump",
+                    "groups"      : ["CooperUnion"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "hugo.Chavez" : {
+                    "firstname"   : "hugo",
+                    "surname"     : "chavez",
+                    "password"    : "cersei",
+                    "city"        : "New York City",
+                    "description" : "Jaime Lanister",
+                    "groups"      : ["CooperUnion"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "mateo.Pacheco" : {
+                    "firstname"   : "mateo",
+                    "surname"     : "pacheco",
+                    "password"    : "il0vehugo",
+                    "city"        : "New York City",
+                    "description" : "Mateo Pacheco",
+                    "groups"      : ["CooperUnion","Rockefeller","Domain Admins","RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "nicolas.Maduro" : {
+                    "firstname"   : "nicolas",
+                    "surname"     : "maduro",
+                    "password"    : "Alc00L&S3x",
+                    "city"        : "New York City",
+                    "description" : "Nicolas Maduro",
+                    "groups"      : ["CooperUnion"],
+                    "path"        : "OU=SugarHill,DC=newyork,DC=local"
+                },
+                "marco.Lopez" : {
+                    "firstname"   : "marco",
+                    "surname"     : "lopez",
+                    "password"    : "iamthekingoftheworld",
+                    "city"        : "New York City",
+                    "description" : "marco lopez",
+                    "groups"      : ["Rockefeller","Domain Admins","RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "ramon.Maldonado" : {
+                    "firstname"   : "ramon",
+                    "surname"     : "maldonado",
+                    "password"    : "1killerlion",
+                    "city"        : "New York City",
+                    "description" : "ramon maldonado",
+                    "groups"      : ["Rockefeller","CooperUnion"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "rafael.Smith" : {
+                    "firstname"   : "rafael",
+                    "surname"     : "smith",
+                    "password"    : "lorastyrell",
+                    "city"        : "New York City",
+                    "description" : "rafael smith",
+                    "groups"      : ["Rockefeller","RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "diego.Montenegro" : {
+                    "firstname"   : "diego",
+                    "surname"     : "montenegro",
+                    "password"    : "Drag0nst0ne",
+                    "city"        : "New York City",
+                    "description" : "diego montenegro",
+                    "groups"      : ["Rockefeller","RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "lorenzo.Cruz" : {
+                    "firstname"   : "lorenzo",
+                    "surname"     : "cruz",
+                    "password"    : "@littlefinger@",
+                    "city"        : "New York City",
+                    "description" : "lorenzo cruz",
+                    "groups"      : ["RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "jesus.Puello" : {
+                    "firstname"   : "jesus",
+                    "surname"     : "puello",
+                    "password"    : "_W1speringsllnight_$",
+                    "city"        : "New York City",
+                    "description" : "jesus puello",
+                    "groups"      : ["RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                },
+                "martin.Osuna" : {
+                    "firstname"   : "martin",
+                    "surname"     : "osuna",
+                    "password"    : "MaesterOfeverybody",
+                    "city"        : "New York City",
+                    "description" : "martin osuna",
+                    "groups"      : ["RadioCity"],
+                    "path"        : "OU=WestSide,DC=newyork,DC=local"
+                }
+            }
+        }
+    }
+}
+}

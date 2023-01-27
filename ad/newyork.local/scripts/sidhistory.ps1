@@ -1,0 +1,1 @@
+netdom trust newyork.local /d:maryland.local /enablesidhistory:yes
