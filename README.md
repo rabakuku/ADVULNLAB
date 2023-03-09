@@ -1,7 +1,5 @@
 # GOAD (Game Of Active Directory) - version 2
 
-![goad.png](./docs/img/GOAD.png)
-
 ## Description
 GOAD is a pentest active directory LAB project.
 The purpose of this lab is to give pentesters a vulnerable Active directory environment ready to use to practice usual attack techniques.
