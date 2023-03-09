@@ -1,6 +1,6 @@
 [all:vars]
 ; domain_name : folder inside ad/
-domain_name=sevenkingdoms.local
+domain_name=newyork.local
 
 ; adapter created by vagrant and virtualbox (comment if you use vmware)
 nat_adapter=Ethernet
@@ -22,7 +22,7 @@ ad_http_proxy=http://x.x.x.x:xxxx
 ad_https_proxy=http://x.x.x.x:xxxx
 
 ; ------------------------------------------------
-; sevenkingdoms.local
+; newyork.local
 [dc01:vars]
 dns_domain=192.168.56.10
 dict_key=dc01
@@ -30,7 +30,7 @@ dict_key=dc01
 192.168.56.10
 
 ; ------------------------------------------------
-; north.sevenkingdoms.local
+; north.newyork.local
 [dc02:vars]
 dns_domain=192.168.56.10
 dict_key=dc02
@@ -44,7 +44,7 @@ dict_key=srv02
 192.168.56.22
 
 ; ------------------------------------------------
-; essos.local
+; maryland.local
 [dc03:vars]
 dns_domain=192.168.56.12
 dict_key=dc03

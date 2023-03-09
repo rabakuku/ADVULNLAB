@@ -59,8 +59,13 @@
     dest: "C:\\inetpub\\wwwroot\\"
 
 - name: Copy uploader website bin
-  win_copy:
+  win_copy: 
     src: files/uploader/bin
+    dest: "C:\\inetpub\\wwwroot\\"
+
+- name: copy css and js
+  win_copy:
+    src: files/assets
     dest: "C:\\inetpub\\wwwroot\\"
 
 - name: Create directory
@@ -81,4 +86,3 @@
 - name: Reboot if installing Web-Server feature requires it
   ansible.windows.win_reboot:
   when: win_feature.reboot_required
-

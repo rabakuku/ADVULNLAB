@@ -1,4 +1,4 @@
-$task = '/c powershell New-PSDrive -Name "Public" -PSProvider "FileSystem" -Root "\\Meren\Private"'
+$task = '/c powershell New-PSDrive -Name "Public" -PSProvider "FileSystem" -Root "\\baltimoree\Private"'
 $repeat = (New-TimeSpan -Minutes 5)
 $taskName = "ntlm_bot"
 $user = "north.newyork.local\fernando.alonzo"

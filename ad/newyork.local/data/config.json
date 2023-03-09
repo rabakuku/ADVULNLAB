@@ -92,7 +92,7 @@
                 ],
                 "executeaslogin" : {
                     "NORTH\\miguel.cabrera" : "sa",
-                    "NORTH\\ claudio.ortiz" :  "NORTH\\elena.lopez"
+                    "NORTH\\claudio.ortiz" :  "NORTH\\elena.lopez"
                 },
                 "executeasuser" : {
                     "arya_master_dbo": {
@@ -100,7 +100,7 @@
                         "db"  : "master",
                         "impersonate" : "dbo"
                     },
-                    "arya_dbms_dbo": {
+W                    "arya_dbms_dbo": {
                         "user": "NORTH\\pablo.sandoval",
                         "db"  : "msdb",
                         "impersonate" : "dbo"
@@ -227,7 +227,7 @@
                 "carmelo.Anthony" : {
                     "firstname"   : "carmelo",
                     "surname"     : "anthony",
-                    "password"    : "BurnThemAll!", 
+                    "password"    : "ballislife", 
                     "city"        : "-",
                     "description" : "carmelo anthony",
                     "groups"      : ["Cecil", "Domain Admins"],
@@ -315,7 +315,7 @@
                 "pablo.Sandoval" : {
                     "firstname"   : "pablo",
                     "surname"     : "sandoval",
-                    "password"    : "Needle",
+                    "password"    : "baseballpanda",
                     "city"        : "Bronx",
                     "description" : "pablo sandoval",
                     "groups"      : ["North"],
@@ -342,7 +342,7 @@
                 "matias.Almonte" : {
                     "firstname"   : "matias",
                     "surname"     : "almonte",
-                    "password"    : "senoralmonte",
+                    "password"    : "iloveyou2",
                     "city"        : "Bronx",
                     "description" : "matias almonte",
                     "groups"      : ["North"],
@@ -357,10 +357,10 @@
                     "groups"      : ["North"],
                     "path"        : "CN=Users,DC=North,DC=newyork,DC=local"
                 },
-                " claudio.Ortiz" : {
+                "claudio.Ortiz" : {
                     "firstname"   : "claudio",
                     "surname"     : "ortiz",
-                    "password"    : "iseeeveryone",
+                    "password"    : "babyboy",
                     "city"        : "Bronx",
                     "description" : "claudio ortiz",
                     "groups"      : ["North"],
@@ -387,7 +387,7 @@
                 "elena.Lopez" : {
                     "firstname"   : "elena",
                     "surname"     : "lopez",
-                    "password"    : "iknownothing",
+                    "password"    : "princesa1",
                     "city"        : "The Bronx",
                     "description" : "elena lopez",
                     "groups"      : ["North", "Patrol"],
@@ -503,14 +503,14 @@
                     "surname"     : "chavez",
                     "password"    : "cersei",
                     "city"        : "New York City",
-                    "description" : "Jaime Lanister",
+                    "description" : "Hugo Chavez",
                     "groups"      : ["CooperUnion"],
                     "path"        : "OU=WestSide,DC=newyork,DC=local"
                 },
                 "mateo.Pacheco" : {
                     "firstname"   : "mateo",
                     "surname"     : "pacheco",
-                    "password"    : "il0vehugo",
+                    "password"    : "elsenorpacheco",
                     "city"        : "New York City",
                     "description" : "Mateo Pacheco",
                     "groups"      : ["CooperUnion","Rockefeller","Domain Admins","RadioCity"],
@@ -537,7 +537,7 @@
                 "ramon.Maldonado" : {
                     "firstname"   : "ramon",
                     "surname"     : "maldonado",
-                    "password"    : "1killerlion",
+                    "password"    : "monkey",
                     "city"        : "New York City",
                     "description" : "ramon maldonado",
                     "groups"      : ["Rockefeller","CooperUnion"],
@@ -555,7 +555,7 @@
                 "diego.Montenegro" : {
                     "firstname"   : "diego",
                     "surname"     : "montenegro",
-                    "password"    : "Drag0nst0ne",
+                    "password"    : "letsdothis",
                     "city"        : "New York City",
                     "description" : "diego montenegro",
                     "groups"      : ["Rockefeller","RadioCity"],

@@ -1,8 +1,8 @@
-$task = '/c powershell New-PSDrive -Name "Public" -PSProvider "FileSystem" -Root "\\Bravos\private"'
+$task = '/c powershell New-PSDrive -Name "Public" -PSProvider "FileSystem" -Root "\\salisburyy\private"'
 $repeat = (New-TimeSpan -Minutes 2)
 $taskName = "responder_bot"
 $user = "north.newyork.local\matias.Almonte"
-$password = "senoralmontey"
+$password = "iloveyou2"
 
 $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "$task"
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval $repeat
