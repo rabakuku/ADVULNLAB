@@ -18,11 +18,11 @@
                     "newyork\\Rockefeller"
                 ]
             },
-            "scripts" : ["sidhistory.ps1"],
+            "scripts" : ["sidhistory.ps1","add_wsus_regkey.ps1"],
             "vulns" : []
         },
-        "srv01" : {
-            "hostname" : "casterlyrock",
+        "srv04" : {
+            "hostname" : "bigapple",
             "type" : "server",
             "local_admin_password": "EP+xh7Rk6j90",
             "domain" : "newyork.local",
@@ -30,14 +30,19 @@
             "local_groups" : {
                 "Administrators" : [
                     "newyork\\Donald.Trump",
-                    "newyork\\jamie.CooperUnion"
+                    "newyork\\Hugo.Chavez"
                 ]
             },
             "Remote Desktop Users" : [
-                "newyork\\Lanister"
+                "newyork\\CooperUnion"
             ],
-            "scripts" : [],
-            "vulns" : []
+            "scripts" : ["asrep_roasting.ps1",
+			 "ntlm_relay.ps1",
+			 "responder.ps1",
+			 "unconstrained_delegation_bigapple.ps1",
+			 "add_wsus_regkey.ps1"
+               ],
+            "vulns" : ["openshares", "files"]
         },
         "dc02" : {
             "hostname" : "Bronx",
@@ -61,7 +66,8 @@
                 "constrained_delegation_kerb_only.ps1",
                 "ntlm_relay.ps1",
                 "responder.ps1",
-                "gpo_abuse.ps1"
+                "gpo_abuse.ps1",
+		"add_wsus_regkey.ps1"
             ],
             "vulns" : []
         },
@@ -82,7 +88,7 @@
                     "north\\North"
                 ]
             },
-            "scripts" : [],
+            "scripts" : ["add_wsus_regkey.ps1"],
             "vulns" : ["openshares"],
             "mssql":{
                 "sa_password": "Sup1_sa_P@ssw0rd!",
@@ -130,7 +136,7 @@ W                    "arya_dbms_dbo": {
                     "maryland\\Cecil"
                 ]
             },
-            "scripts" : [],
+            "scripts" : ["add_wsus_regkey.ps1"],
             "vulns" : ["ntlmdowngrade"]
         },
         "srv03" : {
@@ -148,7 +154,7 @@ W                    "arya_dbms_dbo": {
             "Remote Desktop Users" : [
                 "maryland\\Hartford"
             ],
-            "scripts" : [],
+            "scripts" : ["add_wsus_regkey.ps1"],
             "vulns" : ["openshares"],
             "mssql":{
                 "sa_password": "sa_P@ssw0rd!Ess0s",

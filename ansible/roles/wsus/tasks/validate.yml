@@ -1,0 +1,5 @@
+---
+- name: assert that wsus_targeting_mode is valid
+  ansible.builtin.assert:
+    that: wsus_targeting_mode in ['Client', 'Server']
+    fail_msg: "'wsus_targeting_mode' must be either 'Client' or 'Server'"

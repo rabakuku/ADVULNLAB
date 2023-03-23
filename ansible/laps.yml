@@ -15,7 +15,7 @@
     hosts_dict: "{{lab.hosts}}"
 
 - name: configure laps on servers
-  hosts: srv02,srv03
+  hosts: srv02,srv03,srv04
   roles:
     - { role: 'laps/server', tags: 'laps-server'}
   vars:

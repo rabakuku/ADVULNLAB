@@ -15,7 +15,7 @@
 #        groups: "{{lab.domains[domain].multi_domain_groups_member}}"
 
 - name: Fix trust relationship between this workstation and the primary domain failed
-  hosts: srv02,srv03
+  hosts: srv02,srv03,srv04
   tasks:
     - name: reset machine password
       ansible.windows.win_powershell:

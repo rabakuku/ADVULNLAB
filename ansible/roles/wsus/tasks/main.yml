@@ -1,0 +1,15 @@
+---
+- name: Check Variables
+  import_tasks: validate.yml
+
+- name: Install WSUS Binaries
+  import_tasks: install.yml
+
+- name: Configure WSUS Server
+  import_tasks: configure.yml
+
+- name: Configure Auto Cleanup
+  import_tasks: cleanup.yml
+
+- name: Pull updates
+  import_tasks: syncronize.yml

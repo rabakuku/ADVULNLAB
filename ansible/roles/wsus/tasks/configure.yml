@@ -1,0 +1,202 @@
+---
+- name: Ensure content directory exists
+  win_file:
+    path: "{{ wsus_content_folder }}"
+    state: directory
+
+- name: Set content folder in WSUS
+  win_command: 'WsusUtil.exe postinstall CONTENT_DIR={{ wsus_content_folder }}'
+  args:
+    chdir: "{{ ansible_env.ProgramFiles }}\\Update Services\\Tools"
+    creates: "{{ wsus_content_folder }}\\WSUSContent"
+
+- name: Get current enabled languages in WSUS
+  win_shell: |
+    $wsuscfg = (Get-WsusServer).GetConfiguration()
+    [PSCustomObject]@{
+      'AllUpdateLanguagesEnabled' = $wsuscfg.AllUpdateLanguagesEnabled
+      'EnabledUpdateLanguages'    = @($wsuscfg.GetEnabledUpdateLanguages())
+    } | ConvertTo-Json
+  register: _currentwsuslanguages_command
+  changed_when: false
+
+- name: Parse current enabled languages from JSON
+  set_fact:
+    _currentwsuslanguages: "{{ _currentwsuslanguages_command.stdout | from_json() }}"
+
+- name: Set update languages
+  win_shell: |
+    [array]$languages = ConvertFrom-Json -InputObject '{{ wsus_languages | flatten(levels=1) | to_json(ensure_ascii=False) }}'
+    $wsusconfig = (Get-WsusServer).GetConfiguration()
+    $wsusconfig.AllUpdateLanguagesEnabled = $false
+    $wsusconfig.SetEnabledUpdateLanguages($languages)
+    $wsusconfig.Save()
+  when: _currentwsuslanguages.EnabledUpdateLanguages | symmetric_difference(wsus_languages) | length > 0 or
+        _currentwsuslanguages.AllUpdateLanguagesEnabled
+
+- name: Set WSUS to synchronise from Microsoft Update
+  win_shell: Set-WsusServerSynchronization -SyncFromMU
+
+- name: Configure Proxy for WSUS Server
+  win_shell: |
+    $wsus = Get-WSUSServer
+    $wsusConfig = $wsus.GetConfiguration()
+    $wsusConfig.ProxyName = "{{ wsus_proxy }}"
+    $wsusConfig.ProxyServerPort = "{{ wsus_proxy_port }}"
+    $wsusConfig.UseProxy = $True
+    $wsusConfig.AnonymousProxyAccess = $True
+    $wsusConfig.Save()
+  when:
+    - wsus_use_proxy
+    - wsus_proxy is defined
+    - wsus_proxy_port is defined
+
+- name: Configuring How groups are assigned
+  win_shell: |
+    $wsus = Get-WSUSServer
+    $wsusConfig = $wsus.GetConfiguration()
+    if ($wsusConfig.TargetingMode -ne "{{ wsus_targeting_mode }}"){
+      $wsusConfig.TargetingMode = "{{ wsus_targeting_mode }}"
+      $wsusConfig.Save()
+      Write-Output "Changed"
+    }
+  register: _wsus_targeting_mode
+  changed_when: "'change' in _wsus_targeting_mode.stdout"
+
+- name: Configure Target groups
+  win_shell: |
+     [array]$computer_target_group_list = ConvertFrom-Json -InputObject @'
+     {{ wsus_computer_target_group_list | flatten(levels=1) | to_json() }}
+     '@
+     $wsus = Get-WSUSServer
+     $TargetGroups = $wsus.GetComputerTargetGroups()
+     foreach ($target in $computer_target_group_list){
+         if ($target -notin $wsus.GetComputerTargetGroups().Name){
+             $wsus.CreateComputerTargetGroup($target)
+             Write-Output "change"
+         }
+     }
+  register: _wsus_target_groups
+  changed_when: "'change' in _wsus_target_groups.stdout"
+
+- name: Get Synchronization Source State
+  win_shell: |
+    (Get-WsusServer).GetConfiguration().SyncFromMicrosoftUpdate
+  register: wsus_sync_source_state_raw
+  changed_when: false
+
+- name: Get Last Sync Year
+  win_shell: |
+    (Get-WsusServer).GetSubscription().LastModifiedTime.Year
+  register: wsus_last_sync_year_raw
+  changed_when: false
+
+- name: Do initial synchronization to get latest categories
+  win_shell: |
+    $wsussubscription = (Get-WSUSServer).GetSubscription()
+    $wsussubscription.StartSynchronizationForCategoryOnly()
+
+- name: Wait for synchronization to complete
+  win_shell: |
+    $wsus = Get-WSUSServer
+    $subscription = $wsus.GetSubscription()
+    if ($subscription.GetSynchronizationStatus() -ne 'NotProcessing'){
+      $subscription.GetSynchronizationStatus()
+      exit 1
+    }
+    $subscription.GetSynchronizationStatus()
+    exit 0
+  register: sync
+  until: sync.rc == 0
+  retries: "{{ wsus_category_sync_timeout_minutes }}"
+  delay: 60
+  ignore_errors: true
+
+- name: Set classifications to synchronize
+  win_shell: |
+    [array]$current = (Get-WsusServer).GetSubscription().GetUpdateClassifications()
+    [array]$allClassifications = Get-WsusClassification
+    [array]$shouldTitles = ConvertFrom-Json -InputObject @'
+    {{ wsus_classifications_list | flatten(levels=1) | to_json() }}
+    '@
+    [array]$should = ($allClassifications | Where-Object { $_.Classification.Title -in $shouldTitles }).Classification
+    if ($null -ne $should){
+        $diffs = Compare-Object $current $should -Property Id
+        if ($diffs) {
+          foreach ($classification in $diffs) {
+            if ($classification.SideIndicator -eq '<=') {
+              $allClassifications.Where{ $_.Classification.Id -eq $classification.Id } | Set-WsusClassification -Disable
+            }
+            if ($classification.SideIndicator -eq '=>') {
+              $allClassifications.Where{ $_.Classification.Id -eq $classification.Id } | Set-WsusClassification
+            }
+          }
+          Write-Output "change"
+        }
+    }
+  register: _classificationsenable_command
+  changed_when: "'change' in _classificationsenable_command.stdout"
+
+- name: Set products to synchronize
+  win_shell: |
+    [array]$current = (Get-WsusServer).GetSubscription().GetUpdateCategories()
+    [array]$allProducts = Get-WSUSProduct
+    [array]$shouldTitles = ConvertFrom-Json -InputObject @'
+    {{ wsus_products_list | flatten(levels=1) | to_json() }}
+    '@
+    [array]$should = ($allProducts | Where-Object { $_.Product.Title -in $shouldTitles }).Product
+    if ($null -ne $should){
+      $diffs = Compare-Object $current $should -Property Id
+      if ($diffs) {
+        $changed = $true
+        foreach ($product in $diffs) {
+          if ($product.SideIndicator -eq '<=') {
+            $allProducts.Where{ $_.Product.Id -eq $product.Id } | Set-WsusProduct -Disable
+          }
+          if ($product.SideIndicator -eq '=>') {
+            $allProducts.Where{ $_.Product.Id -eq $product.Id } | Set-WsusProduct
+          }
+        }
+      }
+      Write-Output "change"
+    }
+  register: _productsenable_command
+  changed_when: "'change' in _productsenable_command.stdout"
+
+- name: Set automatic daily synchronization
+  win_shell: |
+    $changed = $false
+    $newTime = [TimeSpan]::new({{ wsus_sync_daily_time.hour }}, {{ wsus_sync_daily_time.minute }}, 0)
+    $wsussubscription = (Get-WSUSServer).GetSubscription()
+    if (-not $wsussubscription.SynchronizeAutomatically) {
+      $wsussubscription.SynchronizeAutomatically = $true
+      $changed = $true
+    }
+    if ($wsussubscription.SynchronizeAutomaticallyTimeOfDay -ne $newTime) {
+      $wsussubscription.SynchronizeAutomaticallyTimeOfDay = $newTime
+      $changed = $true
+    }
+    if ($wsussubscription.NumberOfSynchronizationsPerDay -ne 1) {
+      $wsussubscription.NumberOfSynchronizationsPerDay = 1
+      $changed = $true
+    }
+    if ($changed) {
+      $wsussubscription.Save()
+      Write-Output "change"
+    }
+  register: _dailysync_command
+  changed_when: "'change' in _dailysync_command.stdout"
+
+- name: Configure automatic approval rule
+  win_shell: |
+    [bool]$should = {{ wsus_enable_default_approval_rule | bool | int }}
+    $automatic_approval_rule = (Get-WsusServer).GetInstallApprovalRules() |
+      Where-Object { $_.Name -eq 'Default Automatic Approval Rule' }
+    if ($automatic_approval_rule.Enabled -ne $should) {
+      $automatic_approval_rule.Enabled = $should
+      $automatic_approval_rule.Save()
+      $automatic_approval_rule.ApplyRule()
+      Write-Output "change"
+    }
+  register: _autorule_command
+  changed_when: "'change' in _autorule_command.stdout"

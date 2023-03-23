@@ -13,6 +13,6 @@
 
 
 - name: "Launch windows updates before continue"
-  hosts: srv02,srv03
+  hosts: srv02,srv03,srv04
   roles:
     - { role: 'settings/updates', tags: 'updates'}

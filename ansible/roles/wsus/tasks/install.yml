@@ -1,0 +1,39 @@
+---
+- name: Install UpdateServices
+  win_feature:
+    name: UpdateServices
+    state: present
+    include_sub_features: false
+    include_management_tools: "{{ wsus_install_management_tools }}"
+  register: _wsusfeature
+
+- name: Install UpdateServices-WidDB
+  win_feature:
+    name: UpdateServices-WidDB
+    state: present
+    include_sub_features: false
+    include_management_tools: "{{ wsus_install_management_tools }}"
+  register: _widdb
+
+- name: Install UpdateServices-Services
+  win_feature:
+    name: UpdateServices-Services
+    state: present
+    include_sub_features: false
+    include_management_tools: "{{ wsus_install_management_tools }}"
+  register: _services
+
+- name: Install Reportviewer
+  chocolatey.chocolatey.win_chocolatey:
+    name: 'reportviewer2012'
+    source: "{{ wsus_chocolatey_source }}"
+    state: present
+  register: build_apps
+  when: wsus_install_report_viewer
+
+- name: Reboot for WSUS Install
+  win_reboot:
+  when:
+    _wsusfeature.reboot_required
+    or _widdb.reboot_required
+    or _services.reboot_required

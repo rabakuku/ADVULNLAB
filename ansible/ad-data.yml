@@ -22,7 +22,7 @@
     ad_groups: "{{lab.domains[lab.hosts[dict_key].domain].groups}}"
 
 - name: "Servers AD data configuration"
-  hosts: srv02,srv03
+  hosts: srv02,srv03,srv04
   roles:
     - { role: 'settings/copy_files', tags: 'download_files' }
   vars:

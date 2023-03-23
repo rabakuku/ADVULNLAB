@@ -1,0 +1,31 @@
+---
+wsus_content_folder: "C:\\WSUS"
+
+wsus_use_proxy: false
+wsus_install_management_tools: true
+wsus_enable_default_approval_rule: true
+wsus_category_sync_timeout_minutes: 1000
+wsus_remove_default_website: true
+wsus_install_report_viewer: true
+wsus_targeting_mode: "Server"
+
+wsus_languages:
+  - en
+
+# Use 0 for midnight, not 24
+wsus_sync_daily_time:
+  hour: 0
+  minute: 0
+
+wsus_products_list:
+  - Windows Server 2016
+  - Windows Server 2019
+
+wsus_classifications_list:
+  - Security Updates
+
+wsus_computer_target_group_list:
+  - Servers
+  - WorkStations
+
+wsus_chocolatey_source: "http://chocolatey.org/api/v2"

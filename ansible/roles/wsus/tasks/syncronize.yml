@@ -1,0 +1,26 @@
+---
+
+- name: Start synchronization
+  win_shell: |
+    $wsus = Get-WSUSServer
+    $subscription = $wsus.GetSubscription()
+    $subscription.StartSynchronization()
+
+- name: Wait for synchronization to complete
+  win_shell: |
+    $wsus = Get-WSUSServer
+    $subscription = $wsus.GetSubscription()
+    if ($subscription.GetSynchronizationStatus() -ne 'NotProcessing'){
+        $subscription.GetSynchronizationStatus()
+        exit 1
+    }
+    $subscription.GetSynchronizationStatus()
+    exit 0
+  register: output
+  until: output.rc == 0
+  retries: 1000
+  delay: 60
+  ignore_errors: true
+  when:
+  - wait_for_sync is defined
+  - wait_for_sync is true

@@ -6,7 +6,7 @@
   tags: 'data'
 
 - name: "Setup vulnerabilities with tasks"
-  hosts: dc01,dc02,dc03,srv02,srv03
+  hosts: dc01,dc02,dc03,srv02,srv03,srv04
   tasks:
     - include_role:
         name: "vulns/{{item}}"
