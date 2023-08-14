@@ -106,7 +106,7 @@
                         "db"  : "master",
                         "impersonate" : "dbo"
                     },
-W                    "arya_dbms_dbo": {
+                    "arya_dbms_dbo": {
                         "user": "NORTH\\pablo.sandoval",
                         "db"  : "msdb",
                         "impersonate" : "dbo"
