@@ -28,11 +28,12 @@ dns_domain=192.168.56.10
 dict_key=dc01
 [dc01]
 192.168.56.10
-[srv04:vars]
-dns_domain=192.168.56.10
-dict_key=srv04
-[srv04]
-192.168.56.24
+
+;[srv04:vars]
+;dns_domain=192.168.56.10
+;dict_key=srv04
+;[srv04]
+;192.168.56.24
 
 ; ------------------------------------------------
 ; north.newyork.local
