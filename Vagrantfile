@@ -20,7 +20,7 @@ boxes = [
   # windows server 2016
   { :name => "SRV03", :ip => "192.168.56.23", :box => "StefanScherer/windows_2016", :box_version => "2019.02.14", :os => "windows"},
   # Windows Server 2012_r2 WSUS
-  { :name => "SRV04", :ip => "192.168.56.24", :box => "devopsguys/Windows2012R2Eval", :box_version => "1.0.0", :os => "windows"}
+  #{ :name => "SRV04", :ip => "192.168.56.24", :box => "devopsguys/Windows2012R2Eval", :box_version => "1.0.0", :os => "windows"}
   # ELK
 # { :name => "elk", :ip => "192.168.56.50", :box => "bento/ubuntu-18.04", :os => "linux",
 #   :forwarded_port => [
