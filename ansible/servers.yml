@@ -29,7 +29,3 @@
     sa_password: "{{lab.hosts[dict_key].mssql.sa_password}}"
     linked_servers: "{{lab.hosts[dict_key].mssql.linked_servers}}"
 
-- name: "Install wsus service"
-  hosts: srv04
-  roles:
-    - { role: 'wsus', tags: 'wsus'}
